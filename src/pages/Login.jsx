@@ -20,7 +20,8 @@ const validateSchema = yup.object({
 function Login() {
   const auth = UseAuth();
   const history = useHistory();
-  let urlPage = import.meta.env.VITE_URL;
+  // let urlPage = import.meta.env.VITE_URL;
+  let urlPage = "http://34.204.23.3:7777";
   // initial formik
   const formik = useFormik({
     initialValues: {

@@ -53,7 +53,8 @@ const validateSchema = yup.object({
 });
 
 function CreateUser() {
-  const urlPage = import.meta.env.VITE_URL;
+  // const urlPage = import.meta.env.VITE_URL;
+  const urlPage = "http://34.204.23.3:7777";
   const history = useHistory();
 
   // initial formik

@@ -16,7 +16,8 @@ axios.interceptors.request.use(
 );
 
 function ShowUser() {
-  const urlPage = import.meta.env.VITE_URL;
+  // const urlPage = import.meta.env.VITE_URL;
+  const urlPage = "http://34.204.23.3:7777";
   const params = useParams();
   const [userInfo, setUserInfo] = useState();
 
