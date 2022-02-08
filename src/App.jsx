@@ -1,12 +1,16 @@
 import { useState } from "react";
 import "./index.css";
+import AppRouter from "./routers/AppRouter";
+import AuthProvider from "./context/user/AuthProvider";
 
 function App() {
   // const [count, setCount] = useState(0)
 
   return (
-    <div className="">
-      <h1 className="font-bold text-2xl text-blue-900 test">test 1</h1>
+    <div className="app">
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
     </div>
   );
 }
