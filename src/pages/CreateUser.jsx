@@ -2,20 +2,21 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import UseAuth from "../context/user/UseAuth";
 
-import axios from "axios";
+// import axios from "axios";
 
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
 
-axios.interceptors.request.use(
-  (config) => {
-    config.headers.authorization = token;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// axios.interceptors.request.use(
+//   (config) => {
+//     config.headers.authorization = token;
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 //validate form with yup
 const validateSchema = yup.object({
@@ -55,6 +56,7 @@ const validateSchema = yup.object({
 function CreateUser() {
   const urlPage = import.meta.env.VITE_URL;
   const history = useHistory();
+  const auth = UseAuth();
 
   // initial formik
   const formik = useFormik({
@@ -73,14 +75,23 @@ function CreateUser() {
     },
     validationSchema: validateSchema,
     onSubmit: async (values) => {
-      console.log(values);
       const { password, confirmPassword } = values;
 
       if (password === confirmPassword) {
         delete values.confirmPassword;
         try {
-          const response = await axios.post(`${urlPage}/custom/users`, values);
-          // console.log(response);
+          // const response = await axios.post(`${urlPage}/custom/users`, values);
+          // const response = await axios.post(``, values);
+          const response = await fetch(`${urlPage}/custom/users`, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `${auth.token}`, // notice the Bearer before your token
+            },
+            body: JSON.stringify(values),
+          });
+          const res = await response.json();
+          console.log(res);
           history.push("/users");
         } catch (error) {
           console.log(error);
