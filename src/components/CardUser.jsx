@@ -4,29 +4,29 @@ import { useHistory } from "react-router-dom";
 function CardUser({ data }) {
   const history = useHistory();
   const handleShowUser = () => {
-    history.push({ pathname: `/user/${data}` });
+    history.push({ pathname: `/user/${data._id}` });
   };
 
   const handleUpdateUser = () => {
-    history.push({ pathname: `/user/update/${data}` });
+    history.push({ pathname: `/user/update/${data._id}` });
   };
   return (
     <div className="w-full max-w-sm px-4 py-3 mx-auto bg-white rounded-md shadow-md 0">
       <div className="flex items-center justify-between">
         <span className="text-sm font-light text-gray-800">blautech</span>
         <span className="px-3 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full ">
-          ID 12412412412
+          {`ID ${data._id}`}
         </span>
       </div>
 
       <div>
         <h1 className="mt-2 text-lg font-semibold text-gray-800 ">
-          Allan Edrey Sanchez
+          {`${data.name} - ${data.lastName}`}
         </h1>
 
         <div className="flex">
           <div className="text-gray-400 font-bold mr-4">username:</div>
-          <div>asanchez</div>
+          <div>{data.username}</div>
         </div>
       </div>
 

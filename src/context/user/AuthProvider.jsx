@@ -16,13 +16,12 @@ const AuthProvider = ({ children }) => {
 
   const contextValue = {
     token,
-    login(data) {
-      // console.log(data);
-      setToken({ toke: data });
+    login(token) {
+      setToken(token);
     },
     logout() {
-      setToken(null);
       localStorage.removeItem("token");
+      setToken(null);
     },
     isLogged() {
       if (token === "null") {

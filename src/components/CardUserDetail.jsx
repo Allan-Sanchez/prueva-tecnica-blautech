@@ -1,10 +1,12 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function CardUserDetail({ data }) {
+function CardUserDetail({ userInfo }) {
+  console.log(userInfo);
   const history = useHistory();
+
   const handleUpdateUser = () => {
-    history.push({ pathname: `/user/update/${data}` });
+    history.push({ pathname: `/user/update/${userInfo._id}` });
   };
 
   return (
@@ -12,25 +14,33 @@ function CardUserDetail({ data }) {
       <div className="flex items-center justify-between">
         <span className="text-sm font-light text-gray-800">blautech</span>
         <span className="px-3 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full ">
-          ID {data}{" "}
+          {`ID ${userInfo._id}`}
         </span>
       </div>
 
       <div>
         <h1 className="mt-2 text-lg font-semibold text-gray-800 ">
-          Allan Edrey Sanchez
+          {`${userInfo.name} - ${userInfo.lastName}`}
         </h1>
         <div className="flex">
           <div className="text-gray-400 font-bold mr-4">username:</div>
-          <div>asanchez</div>
+          <div>{userInfo.username}</div>
         </div>
         <div className="flex">
           <div className="text-gray-400 font-bold mr-4">role:</div>
-          <div>asanchez</div>
+          <div>{userInfo.role}</div>
         </div>
         <div className="flex">
           <div className="text-gray-400 font-bold mr-4">phone:</div>
-          <div>asanchez</div>
+          <div>{userInfo.phone}</div>
+        </div>
+        <div className="flex">
+          <div className="text-gray-400 font-bold mr-4">Ext:</div>
+          <div>{userInfo.ext}</div>
+        </div>
+        <div className="flex">
+          <div className="text-gray-400 font-bold mr-4">Area:</div>
+          <div>{userInfo.area}</div>
         </div>
       </div>
 
