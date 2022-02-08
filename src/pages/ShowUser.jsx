@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CardUserDetail from "../components/CardUserDetail";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import UseAuth from "../context/user/UseAuth";
 
 const token = localStorage.getItem("token");
 
@@ -16,17 +17,24 @@ axios.interceptors.request.use(
 );
 
 function ShowUser() {
-  // const urlPage = import.meta.env.VITE_URL;
-  const urlPage = "http://34.204.23.3:7777";
+  const urlPage = import.meta.env.VITE_URL;
   const params = useParams();
+  const auth = UseAuth();
   const [userInfo, setUserInfo] = useState();
 
   // get data
   useEffect(async () => {
     try {
-      const { data } = await axios.get(`${urlPage}/custom/users/${params.id}`);
-      console.log(data);
-      setUserInfo(data);
+      // const { data } = await axios.get(`${urlPage}/custom/users/${params.id}`);
+      const response = await fetch(`${urlPage}/custom/users/${params.id}`, {
+        method: "get",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `${auth.token}`, // notice the Bearer before your token
+        },
+      });
+      const res = await response.json();
+      setUserInfo(res);
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +46,11 @@ function ShowUser() {
         Detalle de Usuario
       </h2>
       <div className="mx-auto">
-        {userInfo ? <CardUserDetail userInfo={userInfo} /> : <h2>no hay data</h2>}
+        {userInfo ? (
+          <CardUserDetail userInfo={userInfo} />
+        ) : (
+          <h2>no hay data</h2>
+        )}
       </div>
     </div>
   );

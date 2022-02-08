@@ -17,6 +17,7 @@ const AuthProvider = ({ children }) => {
   const contextValue = {
     token,
     login(token) {
+      
       setToken(token);
     },
     logout() {

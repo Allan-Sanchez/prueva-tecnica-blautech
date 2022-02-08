@@ -2,35 +2,46 @@ import React, { useEffect, useState } from "react";
 import CardUser from "../components/CardUser";
 import { useHistory } from "react-router-dom";
 import UseAuth from "../context/user/UseAuth";
-import axios from "axios";
+// import axios from "axios";
 
-const token = localStorage.getItem("token");
-
-axios.interceptors.request.use(
-  (config) => {
-    config.headers.authorization = token;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 function Users() {
-  // const urlPage = import.meta.env.VITE_URL;
-  const urlPage = "http://34.204.23.3:7777";
+  const urlPage = import.meta.env.VITE_URL;
   const auth = UseAuth();
   const history = useHistory();
   const [data, setData] = useState();
 
+  // axios.interceptors.request.use(
+  //   (config) => {
+  //     config.headers.authorization = auth.token;
+  //     return config;
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error);
+  //   }
+  // );
   // get data
   useEffect(async () => {
+    getData();
+  }, []);
+
+  const getData = async () => {
     try {
-      const { data } = await axios.get(`${urlPage}/entity/users`);
-      setData(data);
+      // const { data } = await axios.get(`${urlPage}/entity/users`);
+      const response = await fetch(`${urlPage}/entity/users`, {
+        method: "get",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `${auth.token}`, // notice the Bearer before your token
+        },
+      });
+      const res = await response.json();
+
+      // console.log(res);
+      setData(res);
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  };
 
   // methos
   const handleNewUser = () => {
@@ -39,7 +50,7 @@ function Users() {
 
   const handleLogout = async () => {
     await auth.logout();
-    await history.go(0);
+    history.go(0);
   };
   return (
     <div className="min-h-screen w-11/12 mx-auto">
