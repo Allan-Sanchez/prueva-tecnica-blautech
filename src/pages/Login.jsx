@@ -1,66 +1,109 @@
 import React from "react";
+import imgLogo from "../../assets/unnamed.png";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import axios from "axios";
+
+//validate form with yup
+const validateSchema = yup.object({
+  email: yup
+    .string("Escribe tu correo electronico")
+    .email("Escribe un correo valido")
+    .required("El carreo electronico es requerido"),
+  password: yup
+    .string("Escribe tu Contraseña")
+    .min(8, "La Contraseña debe de ser al menos de 8 caracteres")
+    .required("La Contraseña es requerida"),
+});
 
 function Login() {
+  let urlPage = "http://34.204.23.3:7777/login";
+  // initial formik
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validateSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(urlPage, values);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
   return (
-    <section className="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md ">
-      <h2 className="text-lg font-semibold text-gray-700 capitalize">
-        Account settings
-      </h2>
-
-      <form>
-        <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-          <div>
-            <label className="text-gray-700 " htmlFor="username">
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
-            />
-          </div>
-
-          <div>
-            <label className="text-gray-700" htmlFor="emailAddress">
-              Email Address
-            </label>
-            <input
-              id="emailAddress"
-              type="email"
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-            />
-          </div>
-
-          <div>
-            <label className="text-gray-700 " htmlFor="password">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-            />
-          </div>
-
-          <div>
-            <label className="text-gray-700 " htmlFor="passwordConfirmation">
-              Password Confirmation
-            </label>
-            <input
-              id="passwordConfirmation"
-              type="password"
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-            />
-          </div>
+    <div className="min-h-screen flex flex-col justify-center">
+      <section className="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md">
+        <h2 className="text-lg font-semibold text-gray-700 capitalize text-center">
+          Login
+        </h2>
+        <div className="mt-2">
+          <img
+            className="w-360 h-36 rounded-full mx-auto"
+            src={imgLogo}
+            alt="logo de la empresa"
+          />
         </div>
 
-        <div className="flex justify-end mt-6">
-          <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-            Save
-          </button>
-        </div>
-      </form>
-    </section>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="grid grid-cols-1 gap-6 mt-4">
+            <div>
+              <label className="text-gray-700" htmlFor="emailAddress">
+                Email Address
+              </label>
+              <input
+                name="email"
+                id="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.email}
+                type="email"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+              />
+              {formik.touched.email && formik.errors.email ? (
+                <div className="py-2 bg-red-200 border-l-4 border-red-500 text-red-700 p-4 ">
+                  <p className="font-bold">Error</p>
+                  <p>{formik.errors.email}</p>
+                </div>
+              ) : null}
+            </div>
+
+            <div>
+              <label className="text-gray-700 " htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.password}
+                type="password"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+              />
+              {formik.touched.password && formik.errors.password ? (
+                <div className="py-2 bg-red-200 border-l-4 border-red-500 text-red-700 p-4 ">
+                  <p className="font-bold">Error</p>
+                  <p>{formik.errors.password}</p>
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="flex justify-end mt-6">
+            <button
+              type="submit"
+              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
   );
 }
 
